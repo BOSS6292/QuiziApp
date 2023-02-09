@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "184895236120",
+    "project_id": "quiziapp-ec0ce",
+    "storage_bucket": "quiziapp-ec0ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184895236120:android:0a713ad7e8f4b3a444fb6d",
+        "android_client_info": {
+          "package_name": "com.example.quiziapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184895236120-11jjppd0desm8ns97l4bil1q8g7529at.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUyj5aCUonl-DTPHDzxBkoTMOUjAJGaCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184895236120-11jjppd0desm8ns97l4bil1q8g7529at.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
