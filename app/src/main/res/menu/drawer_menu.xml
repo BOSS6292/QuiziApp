@@ -2,7 +2,7 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Follow Us" android:icon="@drawable/ic_star" />
-    <item android:title="Profile" android:icon="@drawable/ic_profile" />
-    <item android:title="Rate Us" android:icon="@drawable/ic_rate"/>
+    <item android:title="Follow Us" android:icon="@drawable/ic_star" android:id="@+id/btnFollowUs"/>
+    <item android:title="Profile" android:icon="@drawable/ic_profile" android:id="@+id/btnProfile"/>
+    <item android:title="Rate Us" android:icon="@drawable/ic_rate" android:id="@+id/btnRateUs"/>
 </menu>

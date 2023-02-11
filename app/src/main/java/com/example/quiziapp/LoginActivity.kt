@@ -1,5 +1,6 @@
 package com.example.quiziapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -20,6 +21,12 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             loginUser()
         }
+
+        loginSignUpText.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun loginUser() {
@@ -30,14 +37,14 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Blank Email or Password", Toast.LENGTH_SHORT).show()
             return
         }
-
-        if (email.matches(emailPattern.toRegex())) {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Error Occured !!", Toast.LENGTH_SHORT).show()
-                }
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) {
+            if (it.isSuccessful) {
+                Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, "Error Occured !!", Toast.LENGTH_SHORT).show()
             }
         }
     }

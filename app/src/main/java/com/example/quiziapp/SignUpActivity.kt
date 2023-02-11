@@ -1,5 +1,6 @@
 package com.example.quiziapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -17,6 +18,12 @@ class SignUpActivity : AppCompatActivity() {
 
         signUpButton.setOnClickListener {
             signUpUser()
+        }
+
+        signUpButtonText.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

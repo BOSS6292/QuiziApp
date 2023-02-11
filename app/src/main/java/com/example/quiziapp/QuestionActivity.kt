@@ -11,12 +11,13 @@ import com.example.quiziapp.adapters.QuizAdapter
 import com.example.quiziapp.models.Question
 import com.example.quiziapp.models.Quiz
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_question.*
 
 class QuestionActivity : AppCompatActivity() {
 
     var quizzes: MutableList<Quiz>? = null
-    var question: MutableMap<String, Question>? = null
+    var questions: MutableMap<String, Question>? = null
     var index = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,20 +39,25 @@ class QuestionActivity : AppCompatActivity() {
         }
 
         btnSubmit.setOnClickListener {
-            Log.d("ANSWER",question.toString())
+            Log.d("ANSWER", questions.toString())
+
+            val intent = Intent(this, ResultActivity::class.java)
+            val json = Gson().toJson(quizzes!![0])
+            intent.putExtra("QUIZ", json)
+            startActivity(intent)
         }
     }
 
     private fun setUpFirestore() {
         val firestore = FirebaseFirestore.getInstance()
-        val date = intent.getStringExtra("DATE")
+        var date = intent.getStringExtra("DATE")
         if (date != null) {
             firestore.collection("quizzes").whereEqualTo("title", date)
                 .get()
                 .addOnSuccessListener {
                     if (it != null && !it.isEmpty) {
                         quizzes = it.toObjects(Quiz::class.java)
-                        question = quizzes!![0].questions
+                        questions = quizzes!![0].questions
                         bindViews()
                     }
                 }
@@ -60,30 +66,27 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun bindViews() {
 
-        btnNext.visibility = View.GONE
         btnPrevious.visibility = View.GONE
         btnSubmit.visibility = View.GONE
+        btnNext.visibility = View.GONE
 
-        if (index == 1) {
+        if (index == 1) { //first question
             btnNext.visibility = View.VISIBLE
-        } else if (index == question!!.size) {
+        } else if (index == questions!!.size) { // last question
             btnSubmit.visibility = View.VISIBLE
             btnPrevious.visibility = View.VISIBLE
-        } else {
-            btnNext.visibility = View.VISIBLE
+        } else { // Middle
             btnPrevious.visibility = View.VISIBLE
+            btnNext.visibility = View.VISIBLE
         }
 
-
-        val question = question!!["question$index"]
+        val question = questions!!["question$index"]
         question?.let {
-
             description.text = it.description
             val optionAdapter = OptionAdapter(this, it)
             optionList.layoutManager = LinearLayoutManager(this)
             optionList.adapter = optionAdapter
             optionList.setHasFixedSize(true)
-
         }
     }
 }

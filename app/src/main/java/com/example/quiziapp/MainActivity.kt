@@ -25,64 +25,71 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setUpFirestore()
         setUpView()
     }
 
-    private fun setUpFirestore() {
-        firestore = FirebaseFirestore.getInstance()
-        val collectionReference = firestore.collection("quizzes")
-        collectionReference.addSnapshotListener { value, error ->
-            if (value == null || error != null) {
-                Toast.makeText(this, "Something Happened", Toast.LENGTH_SHORT).show()
-            }
-            if (value != null) {
-                Log.d("DATA", value.toObjects(Quiz::class.java).toString())
-            }
-            quizList.clear()
-            quizList.addAll(value!!.toObjects(Quiz::class.java))
-            adapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun setUpView() {
+    fun setUpView() {
+        setUpFirestore()
         setUpDrawerLayout()
         setUpRecycleView()
         setUpDatePicker()
     }
 
-    private fun setUpDatePicker() {
+    fun setUpFirestore() {
+        firestore = FirebaseFirestore.getInstance()
+        val collectionReference = firestore.collection("quizzes")
+        collectionReference.addSnapshotListener { value, error ->
+            if (value == null || error != null) {
+                Toast.makeText(this, "Something Happened", Toast.LENGTH_SHORT).show()
+                return@addSnapshotListener
+            }
+            Log.d("DATA", value.toObjects(Quiz::class.java).toString())
+            quizList.clear()
+            quizList.addAll(value.toObjects(Quiz::class.java))
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    fun setUpDatePicker() {
         btnDatePicker.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker().build()
             datePicker.show(supportFragmentManager, "DatePicker")
             datePicker.addOnPositiveButtonClickListener {
-                Log.d("DATE PICKER", datePicker.headerText)
-                val intent = Intent(this, QuestionActivity::class.java)
+                Log.d("DATEPICKER", datePicker.headerText)
                 val dateFormatter = SimpleDateFormat("dd-mm-yyyy")
                 val date = dateFormatter.format(Date(it))
+                val intent = Intent(this, QuestionActivity::class.java)
                 intent.putExtra("DATE", date)
                 startActivity(intent)
             }
             datePicker.addOnNegativeButtonClickListener {
-                Log.d("DATE PICKER", datePicker.headerText)
+                Log.d("DATEPICKER", datePicker.headerText)
+
             }
             datePicker.addOnCancelListener {
-                Log.d("DATE PICKER", "Date Picker Cancelled")
+                Log.d("DATEPICKER", "Date Picker Cancelled")
             }
         }
     }
 
-    private fun setUpRecycleView() {
+    fun setUpRecycleView() {
         adapter = QuizAdapter(this, quizList)
         quizRecyclerView.layoutManager = GridLayoutManager(this, 2)
         quizRecyclerView.adapter = adapter
     }
 
-    private fun setUpDrawerLayout() {
+    fun setUpDrawerLayout() {
         setSupportActionBar(topAppBar)
         actionBarDrawerToggle =
             ActionBarDrawerToggle(this, mainDrawer, R.string.app_name, R.string.app_name)
         actionBarDrawerToggle.syncState()
+
+        navigationView.setNavigationItemSelectedListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+            mainDrawer.closeDrawers()
+            true
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
