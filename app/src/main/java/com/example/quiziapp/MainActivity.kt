@@ -13,6 +13,9 @@ import com.example.quiziapp.models.Quiz
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
@@ -23,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUpFirestore()
-        setDummyData()
         setUpView()
     }
 
@@ -43,21 +45,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDummyData() {
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", ""))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-        quizList.add(Quiz("1", "Tejas"))
-    }
-
     private fun setUpView() {
         setUpDrawerLayout()
         setUpRecycleView()
@@ -71,7 +58,9 @@ class MainActivity : AppCompatActivity() {
             datePicker.addOnPositiveButtonClickListener {
                 Log.d("DATE PICKER", datePicker.headerText)
                 val intent = Intent(this, QuestionActivity::class.java)
-                intent.putExtra("DATE", datePicker.headerText)
+                val dateFormatter = SimpleDateFormat("dd-mm-yyyy")
+                val date = dateFormatter.format(Date(it))
+                intent.putExtra("DATE", date)
                 startActivity(intent)
             }
             datePicker.addOnNegativeButtonClickListener {
